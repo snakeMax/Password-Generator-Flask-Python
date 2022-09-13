@@ -6,12 +6,19 @@
     <title>Document</title>
 </head>
 <body>
+    {% include "header.html" %}
     <h1>Secure Password Generator</h1>
     <p>Your Password: </p>
-    <p>{{ r }}</p>
+    <input type="text" name="" placeholder="Create password" id="password" readonly>
 
     <br>
-    <button onclick="location.reload()">New password</button>
-    <p>{{ debug }}</p>
+    <button onclick="genPassword()">New password</button>
+    <button onclick="copyPassword()">Copy Password</button>
+    <br><br>
+    {{ debug }}
+    {{ additional }}
+    <p>{{ data }}</p>
+    {% include "footer.html" %}
+    <script src="{{url_for('static', filename='scripts.js')}}"></script>
 </body>
 </html>
