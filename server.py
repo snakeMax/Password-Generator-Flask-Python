@@ -46,7 +46,7 @@ def connect_to_base():
 ########################################### URL PROCESSING //
 
 @app.route('/')
-def website():
+def website_main_page():
     return render_template('index.html', debug = connect_to_base())
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -60,7 +60,17 @@ def data_page():
         usern = request.args.get('user')
         return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE Fornavn='{}'""".format(usern), ''))
 
-    return render_template('index.html')
+    return render_template('index.html', data = 'Database info')
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit_data_page():
+    if request.args.get('user' and 'to') != None:
+        usern = request.args.get('user')
+        uid = execute_command_sql("""SELECT ID FROM elever WHERE Fornavn='{}'""".format(usern), '')
+        to = request.args.get('to')
+        return render_template('index.html', data = execute_command_sql("""UPDATE elever SET Fornavn='{}' WHERE ID='{}'""".format(to, uid), ''))
+    
+    return render_template('index.html', additional = 'Change Data')
 
 ########################################### URL PROCESSING //
 
