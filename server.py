@@ -26,11 +26,11 @@ def check_connection(statement):
     cursor = mysql.connection.cursor()
     cursor.execute(statement)
     cursor.close()
-    return '<p>Connected to database!</p>'
+    return 'Connected to database!'
 
-def execute_command_sql(statement):
+def execute_command_sql(statement, index):
     cursor = mysql.connection.cursor()
-    cursor.execute(statement)
+    cursor.execute(statement + index)
     result = cursor.fetchone()
     return result
 
@@ -39,7 +39,7 @@ def connect_to_base():
         return check_connection(''' SELECT 1 ''')
     except Exception as e:
         print("\nThe error:\n" + str(e) + "\n")
-        return '<p>Sql error!</p>'
+        return 'Sql error!'
 
 ########################################### DATABASE //
 
@@ -51,11 +51,12 @@ def website():
 
 @app.route('/login')
 def login_page():
-    return render_template('index.html', additional = '<p>Login page</p>')
+    return render_template('index.html', additional = 'Login page')
 
 @app.route('/data')
 def data_page():
-    return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE 1""")[1])
+    index = 1
+    return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE """, str(index)))
 
 ########################################### PAGES //
 
