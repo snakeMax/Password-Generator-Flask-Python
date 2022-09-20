@@ -1,17 +1,17 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 import random, string
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-########################################### Variables //
+########################################### GLOBAL VARIABLES //
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = '2it'
 
-########################################### Variables //
+########################################### GLOBAL VARIABLES //
 
 
 ########################################### DATABASE //
@@ -43,22 +43,26 @@ def connect_to_base():
 
 ########################################### DATABASE //
 
-########################################### PAGES //
+########################################### URL PROCESSING //
 
 @app.route('/')
 def website():
     return render_template('index.html', debug = connect_to_base())
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    return render_template('index.html', additional = 'Login page')
+    language = request.args.get('language')
+    return render_template('index.html', additional = 'Login page', data = 'language is {}'.format(language))
 
-@app.route('/data')
+@app.route('/data', methods=['GET', 'POST'])
 def data_page():
-    index = 1
-    return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE """, str(index)))
+    if request.args.get('user') != None:
+        usern = request.args.get('user')
+        return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE Fornavn='{}'""".format(usern), ''))
 
-########################################### PAGES //
+    return render_template('index.html')
+
+########################################### URL PROCESSING //
 
 if __name__ == '__main__':
    app.run(host='localhost', port=5000)

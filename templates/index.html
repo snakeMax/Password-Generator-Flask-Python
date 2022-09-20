@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <script type="text/javascript">
+        if (!(window.location.href.indexOf("language") > -1)) {
+            if (window.location.href.indexOf("login") > -1) {
+                window.location.replace("http://localhost:5000/login?language=the%20language%20of%20love");
+            }
+        }
+        </script>
     {% include "header.html" %}
     <h1>Secure Password Generator</h1>
     <p>Your Password: </p>
@@ -19,6 +26,7 @@
     {{ debug }}
     {{ additional }}
     {{ data }}
+    {% include "form.html" %}
     {% include "footer.html" %}
     <script src="{{url_for('static', filename='scripts.js')}}"></script>
 </body>
