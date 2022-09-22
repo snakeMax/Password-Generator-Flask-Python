@@ -28,11 +28,20 @@ def check_connection(statement):
     cursor.close()
     return 'Connected to database!'
 
-def execute_command_sql(statement, index):
+def execute_command_sql(statement):
     cursor = mysql.connection.cursor()
-    cursor.execute(statement + index)
+    cursor.execute(statement)
     result = cursor.fetchone()
     return result
+
+def execute_update_sql(statement):
+    cursor = mysql.connection.cursor()
+    try:
+        cursor.execute(statement)
+        cursor.close()
+        return 'Updated Database'
+    except Exception as e:
+        return e
 
 def connect_to_base():
     try:
@@ -58,7 +67,7 @@ def login_page():
 def data_page():
     if request.args.get('user') != None:
         usern = request.args.get('user')
-        return render_template('index.html', data = execute_command_sql("""SELECT * FROM elever WHERE Fornavn='{}'""".format(usern), ''))
+        return render_template('index.html', data = execute_command_sql("SELECT * FROM elever WHERE Fornavn = '{}'".format(usern)))
 
     return render_template('index.html', data = 'Database info')
 
@@ -66,9 +75,8 @@ def data_page():
 def edit_data_page():
     if request.args.get('user' and 'to') != None:
         usern = request.args.get('user')
-        uid = execute_command_sql("""SELECT ID FROM elever WHERE Fornavn='{}'""".format(usern), '')
         to = request.args.get('to')
-        return render_template('index.html', data = execute_command_sql("""UPDATE elever SET Fornavn='{}' WHERE ID='{}'""".format(to, uid), ''))
+        return render_template('index.html', data = execute_update_sql("UPDATE elever SET Fornavn = '{}' WHERE Fornavn = '{}'".format(to, usern)))
     
     return render_template('index.html', additional = 'Change Data')
 
